@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Agenda de Contatos{% endblock %}
+
+{% block body %}
+    {% if addresses %}
+        <table id="addresses" class="table table-striped">
+            <thead>
+            <tr>
+                <th>Quadra</th>
+                <th>Número</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for address in addresses %}
+                <tr>
+                    <td>{{ address.quadra }}</td>
+                    <td>{{ address.numero }}</td>
+                    <td>
+                        <a href="/address/show/{{ address.id }}" class="btn btn-dark">Show</a>
+                        <a href="/address/edit/{{ address.id }}" class="btn btn-light">Edit</a>
+                        <a href="#" class="btn btn-danger delete-article" data-id="{{ address.id }}">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Nenhum endereço cadastrado</p>
+    {% endif %}
+{% endblock %}

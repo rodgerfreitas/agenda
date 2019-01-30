@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ address.quadra }}{% endblock %}
+
+{% block body %}
+ <h1>{{ address.quadra }}</h1>
+ <p>{{ address.numero }}</p>
+ <p>{{ address.observacao }}</p>
+ <hr>
+ <a href="/adress">Go Back</a>
+{% endblock %}
