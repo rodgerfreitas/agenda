@@ -3,7 +3,23 @@
 {% block title %}Editar Endereço{% endblock %}
 
 {% block body %}
- {{ form_start(form) }}
- {{ form_widget(form) }}
- {{ form_end(form) }}
+ <form name="form" method="post">
+   <div id="form">
+    <div>
+     <label for="form_quadra" class="required">Quadra</label>
+     <input type="text" id="form_quadra" name="form[quadra]" required="required" class="form-control" value="{{ address.quadra }}">
+    </div>
+    <div>
+     <label for="form_numero" class="required">Numero</label>
+     <input type="text" id="form_numero" name="form[numero]" required="required" class="form-control" value="{{ address.numero }}">
+    </div>
+    <div>
+     <label for="form_observacao" class="required">Observacao</label>
+     <textarea id="form_observacao" name="form[observacao]" required="required" class="form-control">{{ address.observacao }}</textarea>
+    </div>
+    <div>
+     <button type="submit" id="form_save" name="form[save]" class="btn btn-primary mt-3">salvar</button>
+    </div>
+   </div>
+ </form>
 {% endblock %}

@@ -21,7 +21,7 @@
        */
        public function index() {
           $addresses= $this->getDoctrine()->getRepository(Address::class)->findAll();
-          return $this->render('addresses/index.html.twig', array('addresses' => $addresses));
+          return $this->render('addresses/index.html.twig', ['addresses' => $addresses]);
        }
 
       /**
@@ -30,7 +30,7 @@
        */
       public function show($id) {
           $address = $this->getDoctrine()->getRepository(Address::class)->find($id);
-          return $this->render('addresses/show.html.twig', array('address' => $address));
+          return $this->render('addresses/show.html.twig',['address' => $address]);
       }
 
       /**
@@ -38,22 +38,14 @@
        * Method({"GET", "POST"})
        */
       public function new(Request $request) {
-          $address = new Address();
 
-          $form = $this->createFormBuilder($address)
-              ->add('quadra', TextType::class, array('attr' => array('class' => 'form-control')))
-              ->add('numero', TextType::class, array('attr' => array('class' => 'form-control')))
-              ->add('observacao', TextareaType::class, array('attr' => array('class' => 'form-control')))
-              ->add('save', SubmitType::class, array(
-                  'label' => 'salvar',
-                  'attr' => array('class' => 'btn btn-primary mt-3')
-              ))
-              ->getForm();
+          if($request->isMethod('post')) {
+              $address = new Address;
+              $arrPost = $request->get('form');
 
-          $form->handleRequest($request);
-
-          if($form->isSubmitted() && $form->isValid()) {
-              $address = $form->getData();
+              $address->setQuadra($arrPost['quadra']);
+              $address->setNumero($arrPost['numero']);
+              $address->setObservacao($arrPost['observacao']);
 
               $entityManager = $this->getDoctrine()->getManager();
               $entityManager->persist($address);
@@ -62,9 +54,7 @@
               return $this->redirectToRoute('address_list');
           }
 
-          return $this->render('addresses/new.html.twig', array(
-              'form' => $form->createView()
-          ));
+          return $this->render('addresses/new.html.twig');
       }
 
       /**
@@ -74,29 +64,47 @@
       public function edit(Request $request, $id) {
 
           $address = $this->getDoctrine()->getRepository(Address::class)->find($id) ;
-          $form = $this->createFormBuilder($address)
-              ->add('quadra', TextType::class, array('attr' => array('class' => 'form-control')))
-              ->add('numero', TextType::class, array('attr' => array('class' => 'form-control')))
-              ->add('observacao', TextareaType::class, array('attr' => array('class' => 'form-control')))
-              ->add('save', SubmitType::class, array(
-                  'label' => 'salvar',
-                  'attr' => array('class' => 'btn btn-primary mt-3')
-              ))
-              ->getForm();
 
-          $form->handleRequest($request);
+          if($request->isMethod('post')) {
+              $arrPost = $request->get('form');
 
-          if($form->isSubmitted() && $form->isValid()) {
+              $address->setQuadra($arrPost['quadra']);
+              $address->setNumero($arrPost['numero']);
+              $address->setObservacao($arrPost['observacao']);
 
               $entityManager = $this->getDoctrine()->getManager();
+              $entityManager->persist($address);
               $entityManager->flush();
 
               return $this->redirectToRoute('address_list');
           }
 
-          return $this->render('addresses/edit.html.twig', array(
-              'form' => $form->createView()
-          ));
+          return $this->render('addresses/edit.html.twig',['address' => $address]);
+
+//          $address = $this->getDoctrine()->getRepository(Address::class)->find($id) ;
+//          $form = $this->createFormBuilder($address)
+//              ->add('quadra', TextType::class, array('attr' => array('class' => 'form-control')))
+//              ->add('numero', TextType::class, array('attr' => array('class' => 'form-control')))
+//              ->add('observacao', TextareaType::class, array('attr' => array('class' => 'form-control')))
+//              ->add('save', SubmitType::class, array(
+//                  'label' => 'salvar',
+//                  'attr' => array('class' => 'btn btn-primary mt-3')
+//              ))
+//              ->getForm();
+//
+//          $form->handleRequest($request);
+//
+//          if($form->isSubmitted() && $form->isValid()) {
+//
+//              $entityManager = $this->getDoctrine()->getManager();
+//              $entityManager->flush();
+//
+//              return $this->redirectToRoute('address_list');
+//          }
+//
+//          return $this->render('addresses/edit.html.twig', array(
+//              'form' => $form->createView()
+//          ));
       }
 
       /**
