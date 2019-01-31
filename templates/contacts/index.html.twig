@@ -4,26 +4,33 @@
 
 {% block body %}
     {% if contacts %}
-        <table id="contacts" class="table table-striped">
-            <thead>
-            <tr>
-                <th>Nome</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for contact in contacts %}
-                <tr>
-                    <td>{{ contact.nome }}</td>
-                    <td>
-                        <a href="/contact/show/{{ contact.id }}" class="btn btn-dark">Show</a>
-                        <a href="/contact/edit/{{ contact.id }}" class="btn btn-light">Edit</a>
-                        <a href="#" class="btn btn-danger delete-article" data-id="{{ contact.id }}">Delete</a>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <table id="contacts" class="table table-hover  table-responsive-sm table-striped">
+                        <thead>
+                            <tr class="row">
+                                <th class="col-sm-8">Nome</th>
+                                <th class="col-sm-4"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for contact in contacts %}
+                            <tr class="row">
+                                <td class="col-sm-8">{{ contact.nome }}</td>
+                                <td class="col-sm-4 text-right">
+                                    <a href="/contact/show/{{ contact.id }}" class="btn btn-dark btn-sm">Show</a>
+                                    <a href="/contact/edit/{{ contact.id }}" class="btn btn-light btn-sm">Edit</a>
+                                    <a href="#" class="btn btn-danger delete-article btn-sm" data-id="{{ contact.id }}">Delete</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     {% else %}
         <p>Nenhum contato cadastrado</p>
     {% endif %}
