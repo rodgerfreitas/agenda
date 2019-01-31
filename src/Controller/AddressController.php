@@ -3,6 +3,7 @@
 
   use App\Entity\Address;
 
+  use App\Entity\Contact;
   use Symfony\Component\HttpFoundation\Response;
   use Symfony\Component\HttpFoundation\Request;
   use Symfony\Component\Routing\Annotation\Route;
@@ -34,15 +35,16 @@
       }
 
       /**
-       * @Route("/address/new", name="address_new")
+       * @Route("/address/new/{id}", name="address_new")
        * Method({"GET", "POST"})
        */
-      public function new(Request $request) {
+      public function new(Request $request, $id) {
 
           if($request->isMethod('post')) {
               $address = new Address;
               $arrPost = $request->get('form');
 
+              $address->setContact($this->getDoctrine()->getRepository(Contact::class)->find($id));
               $address->setQuadra($arrPost['quadra']);
               $address->setNumero($arrPost['numero']);
               $address->setObservacao($arrPost['observacao']);
@@ -51,7 +53,7 @@
               $entityManager->persist($address);
               $entityManager->flush();
 
-              return $this->redirectToRoute('address_list');
+              return $this->redirectToRoute('contact_show',['id'=>$id]);
           }
 
           return $this->render('addresses/new.html.twig');
@@ -76,35 +78,10 @@
               $entityManager->persist($address);
               $entityManager->flush();
 
-              return $this->redirectToRoute('address_list');
+              return $this->redirectToRoute('contact_show',['id'=>$id]);
           }
 
           return $this->render('addresses/edit.html.twig',['address' => $address]);
-
-//          $address = $this->getDoctrine()->getRepository(Address::class)->find($id) ;
-//          $form = $this->createFormBuilder($address)
-//              ->add('quadra', TextType::class, array('attr' => array('class' => 'form-control')))
-//              ->add('numero', TextType::class, array('attr' => array('class' => 'form-control')))
-//              ->add('observacao', TextareaType::class, array('attr' => array('class' => 'form-control')))
-//              ->add('save', SubmitType::class, array(
-//                  'label' => 'salvar',
-//                  'attr' => array('class' => 'btn btn-primary mt-3')
-//              ))
-//              ->getForm();
-//
-//          $form->handleRequest($request);
-//
-//          if($form->isSubmitted() && $form->isValid()) {
-//
-//              $entityManager = $this->getDoctrine()->getManager();
-//              $entityManager->flush();
-//
-//              return $this->redirectToRoute('address_list');
-//          }
-//
-//          return $this->render('addresses/edit.html.twig', array(
-//              'form' => $form->createView()
-//          ));
       }
 
       /**

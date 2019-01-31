@@ -2,6 +2,7 @@
   namespace App\Controller;
 
   use App\Entity\Contact;
+  use App\Entity\Address;
 
   use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
   use Symfony\Component\HttpFoundation\Response;
@@ -29,7 +30,8 @@
        */
       public function show($id) {
           $contact = $this->getDoctrine()->getRepository(Contact::class)->find($id);
-          return $this->render('contacts/show.html.twig', array('contact' => $contact));
+          $addresses = count($contact->getAddresses()) == 0 ? false : $contact->getAddresses();
+          return $this->render('contacts/show.html.twig', ['contact' => $contact, 'addresses' => $addresses]);
       }
 
       /**
@@ -104,6 +106,14 @@
        */
       public function delete(Request $request, $id) {
           $contact = $this->getDoctrine()->getRepository(Contact::class)->find($id);
+
+          $qd = $this->getDoctrine()->getRepository(Address::class)->createQueryBuilder(Address::class);
+          $qd->delete(Address::class, 'a')
+              ->where('a.idcontact = :id')
+              ->setParameter('id',$id);
+          $query = $qd->getQuery();
+
+          $query->getResult();
 
           $entityManager = $this->getDoctrine()->getManager();
           $entityManager->remove($contact);

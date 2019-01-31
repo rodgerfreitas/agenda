@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\OneToMany;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ContactRepository")
@@ -30,6 +32,15 @@ class Contact
      * @ORM\Column(type="string", length=100)
      */
     private $email;
+
+    /**
+     * @OneToMany(targetEntity="Address", mappedBy="contact")
+     */
+    private $addresses;
+
+    public function __construct() {
+        $this->addresses = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -70,5 +81,10 @@ class Contact
         $this->email = $email;
 
         return $this;
+    }
+
+    public function getAddresses()
+    {
+        return $this->addresses;
     }
 }

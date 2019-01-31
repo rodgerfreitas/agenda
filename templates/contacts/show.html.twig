@@ -1,11 +1,15 @@
 {% extends 'base.html.twig' %}
-
 {% block title %}{{ contact.nome }}{% endblock %}
-
 {% block body %}
  <h1>{{ contact.nome }}</h1>
  <p>{{ contact.telefone }}</p>
  <p>{{ contact.email }}</p>
  <hr>
- <a href="/">Go Back</a>
+ {{ include('addresses/index.html.twig') }}
+ <hr>
+ <a href="/">Voltar</a>
 {% endblock %}
+{% block javascripts %}
+ <script src="/js/main.js"></script>
+{% endblock %}
+

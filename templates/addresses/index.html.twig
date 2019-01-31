@@ -1,32 +1,39 @@
-{% extends 'base.html.twig' %}
+{% if addresses %}
 
-{% block title %}Agenda de Contatos{% endblock %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <table id="addresses" class="table table-hover  table-responsive-sm table-striped">
+                    <thead>
+                    <tr class="row">
+                        <th class="col-sm-6">Quadra</th>
+                        <th class="col-sm-2">Número</th>
+                        <th class="col-sm-4 text-right">
+                            <a href="/address/new/{{ contact.id }}" class="btn btn-dark btn-sm">Adicionar</a>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for address in addresses %}
+                        <tr class="row">
+                            <td class="col-sm-6">{{ address.quadra }}</td>
+                            <td class="col-sm-2">{{ address.numero }}</td>
+                            <td class="col-sm-4 text-right">
+                                <a href="/address/show/{{ address.id }}" class="btn btn-dark btn-sm">Show</a>
+                                <a href="/address/edit/{{ address.id }}" class="btn btn-light btn-sm">Edit</a>
+                                <a href="#" class="btn btn-danger delete-article btn-sm" data-id="{{ address.id }}">
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-{% block body %}
-    {% if addresses %}
-        <table id="addresses" class="table table-striped">
-            <thead>
-            <tr>
-                <th>Quadra</th>
-                <th>Número</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for address in addresses %}
-                <tr>
-                    <td>{{ address.quadra }}</td>
-                    <td>{{ address.numero }}</td>
-                    <td>
-                        <a href="/address/show/{{ address.id }}" class="btn btn-dark">Show</a>
-                        <a href="/address/edit/{{ address.id }}" class="btn btn-light">Edit</a>
-                        <a href="#" class="btn btn-danger delete-article" data-id="{{ address.id }}">Delete</a>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>Nenhum endereço cadastrado</p>
-    {% endif %}
-{% endblock %}
+{% else %}
+    <p>Nenhum endereço cadastrado</p>
+    <a href="/address/new/{{ contact.id }}" class="btn btn-dark btn-sm">Adicionar</a>
+{% endif %}
