@@ -12,6 +12,7 @@
   use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
   use Symfony\Component\Form\Extension\Core\Type\TextType;
   use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+  use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
   class ContactController extends AbstractController {
@@ -39,7 +40,7 @@
        * @Route("/contact/new", name="contact_new")
        * Method({"GET", "POST"})
        */
-      public function new(Request $request) {
+      public function new(Request $request, ValidatorInterface $validator) {
           $contact = new Contact();
 
           $form = $this->createFormBuilder($contact)
