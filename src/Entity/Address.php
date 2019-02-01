@@ -5,6 +5,8 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 
 /**
@@ -26,16 +28,36 @@ class Address
 
     /**
      * @ORM\Column(type="string", length=200)
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 50,
+     *      minMessage = "A quadra deve ter no mínimo 2 carateres",
+     *      maxMessage = "A quadra deve ter no maximo 200 carateres"
+     * )
      */
     private $quadra;
 
     /**
      * @ORM\Column(type="string", length=10)
+     * @Assert\NotBlank
+     * @Assert\Type(
+     *     type="numeric",
+     *     message="O campo número deve conter apenas dígitos."
+     * )
+     * @Assert\Length(
+     *      max = 15,
+     *      maxMessage = "O campo número deve ter no maximo 15 digitos"
+     * )
      */
     private $numero;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(
+     *      max = 255,
+     *      maxMessage = "A observação deve conter no máximo 255 caracteres"
+     * )
      */
     private $observacao;
 
