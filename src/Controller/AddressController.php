@@ -4,6 +4,7 @@
   use App\Entity\Address;
 
   use App\Entity\Contact;
+  use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
   use Symfony\Component\HttpFoundation\Response;
   use Symfony\Component\HttpFoundation\Request;
   use Symfony\Component\Routing\Annotation\Route;
@@ -15,7 +16,7 @@
   use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
-  class AddressController extends Controller {
+  class AddressController extends AbstractController {
 
       /**
        * @Route("/address", name="address_list")
@@ -29,6 +30,8 @@
       /**
        * @Route("/address/show/{id}", name="address_show")
        * @Method({"GET"})
+       * @param $id
+       * @return Response
        */
       public function show($id) {
           $address = $this->getDoctrine()->getRepository(Address::class)->find($id);
@@ -38,6 +41,10 @@
       /**
        * @Route("/address/new/{id}", name="address_new")
        * Method({"GET", "POST"})
+       * @param Request $request
+       * @param ValidatorInterface $validator
+       * @param $id
+       * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
        */
       public function new(Request $request, ValidatorInterface $validator, $id) {
 
@@ -70,8 +77,12 @@
       /**
        * @Route("/address/edit/{id}", name="address_edit")
        * Method({"GET","POST"})
+       * @param Request $request
+       * @param ValidatorInterface $validator
+       * @param $id
+       * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
        */
-      public function edit(Request $request, $id) {
+      public function edit(Request $request, ValidatorInterface $validator, $id) {
 
           $address = $this->getDoctrine()->getRepository(Address::class)->find($id) ;
 
@@ -82,19 +93,28 @@
               $address->setNumero($arrPost['numero']);
               $address->setObservacao($arrPost['observacao']);
 
+              $errors = $validator->validate($address);
+
+              if (count($errors) > 0){
+                  return $this->render('addresses/edit.html.twig',['address'=> $address,'errors'=>$errors]);
+              }
+
               $entityManager = $this->getDoctrine()->getManager();
               $entityManager->persist($address);
               $entityManager->flush();
 
-              return $this->redirectToRoute('contact_show',['id'=>$id]);
+              return $this->redirectToRoute('contact_show',['id'=> $address->getIdcontact() ]);
           }
 
-          return $this->render('addresses/edit.html.twig',['address' => $address]);
+          return $this->render('addresses/edit.html.twig',['address'=> $address,'errors' => '']);
       }
 
       /**
        * @Route("/address/delete/{id}")
        * @Method({"DELETE"})
+       * @param Request $request
+       * @param $id
+       * @return \Symfony\Component\HttpFoundation\RedirectResponse
        */
       public function delete(Request $request, $id) {
           $address = $this->getDoctrine()->getRepository(Address::class)->find($id);

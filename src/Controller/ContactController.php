@@ -19,6 +19,7 @@
       /**
        * @Route("/", name="contact_list")
        * @Method({"GET"})
+       * @return Response
        */
        public function index() {
           $contacts= $this->getDoctrine()->getRepository(Contact::class)->findAll();
@@ -28,6 +29,8 @@
       /**
        * @Route("/contact/show/{id}", name="contact_show")
        * @Method({"GET"})
+       * @param $id
+       * @return Response
        */
       public function show($id) {
           $contact = $this->getDoctrine()->getRepository(Contact::class)->find($id);
@@ -38,6 +41,8 @@
       /**
        * @Route("/contact/new", name="contact_new")
        * Method({"GET", "POST"})
+       * @param Request $request
+       * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
        */
       public function new(Request $request) {
           $contact = new Contact();
@@ -72,10 +77,14 @@
       /**
        * @Route("/contact/edit/{id}", name="contact_edit")
        * Method({"GET","POST"})
+       * @param Request $request
+       * @param $id
+       * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
        */
       public function edit(Request $request, $id) {
 
           $contact = $this->getDoctrine()->getRepository(Contact::class)->find($id) ;
+          $addresses = count($contact->getAddresses()) == 0 ? false : $contact->getAddresses();
           $form = $this->createFormBuilder($contact)
               ->add('nome', TextType::class, ['attr' => ['class' => 'form-control']])
               ->add('email', EmailType::class, ['attr' => ['class' => 'form-control email']])
@@ -96,14 +105,17 @@
               return $this->redirectToRoute('contact_list');
           }
 
-          return $this->render('contacts/edit.html.twig', array(
-              'form' => $form->createView()
-          ));
+          return $this->render('contacts/edit.html.twig', [
+              'form' => $form->createView(), 'addresses' => $addresses, 'contact' => $contact
+          ]);
       }
 
       /**
        * @Route("/contact/delete/{id}")
        * @Method({"DELETE"})
+       * @param Request $request
+       * @param $id
+       * @return \Symfony\Component\HttpFoundation\RedirectResponse
        */
       public function delete(Request $request, $id) {
           $contact = $this->getDoctrine()->getRepository(Contact::class)->find($id);
