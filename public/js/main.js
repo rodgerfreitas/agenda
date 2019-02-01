@@ -22,7 +22,7 @@ if (addresses) {
 
         fetch(`/address/delete/${id}`, {
           method: 'DELETE'
-        }).then(res => {});
+        }).then(res => window.location.reload());
       }
     }
   });

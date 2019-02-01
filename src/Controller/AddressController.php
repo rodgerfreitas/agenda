@@ -119,10 +119,12 @@
       public function delete(Request $request, $id) {
           $address = $this->getDoctrine()->getRepository(Address::class)->find($id);
 
+          $intIdContact = $address->getIdContact();
+
           $entityManager = $this->getDoctrine()->getManager();
           $entityManager->remove($address);
           $entityManager->flush();
 
-          return $this->redirectToRoute('contact_show',['id'=>$id]);
+          return $this->redirectToRoute('contact_show',['id'=> $intIdContact]);
       }
   }

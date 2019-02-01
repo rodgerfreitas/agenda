@@ -19,6 +19,21 @@ class AddressRepository extends ServiceEntityRepository
         parent::__construct($registry, Address::class);
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
+    public function deleteByIdContact($id)
+    {
+        return $this->createQueryBuilder('a')
+            ->delete(Address::class, 'a')
+            ->where('a.idcontact = :id')
+            ->setParameter('id',$id)
+            ->getQuery()
+            ->getResult();
+    }
+
+
     // /**
     //  * @return Address[] Returns an array of Address objects
     //  */

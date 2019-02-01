@@ -4,6 +4,7 @@
  <h1>{{ contact.nome }}</h1>
  <p>{{ contact.telefone }}</p>
  <p>{{ contact.email }}</p>
+ <a href="/contact/edit/{{ contact.id }}" class="btn btn-dark btn-sm">Editar</a>
  <hr>
  {{ include('addresses/index.html.twig') }}
  <hr>

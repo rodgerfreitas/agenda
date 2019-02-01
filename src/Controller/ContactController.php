@@ -120,13 +120,7 @@
       public function delete(Request $request, $id) {
           $contact = $this->getDoctrine()->getRepository(Contact::class)->find($id);
 
-          $qd = $this->getDoctrine()->getRepository(Address::class)->createQueryBuilder(Address::class);
-          $qd->delete(Address::class, 'a')
-              ->where('a.idcontact = :id')
-              ->setParameter('id',$id);
-          $query = $qd->getQuery();
-
-          $query->getResult();
+          $this->getDoctrine()->getRepository(Address::class)->deleteByIdContact($id);
 
           $entityManager = $this->getDoctrine()->getManager();
           $entityManager->remove($contact);
