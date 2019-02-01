@@ -3,6 +3,13 @@
 {% block title %}Novo Endereço{% endblock %}
 
 {% block body %}
+   {% if errors %}
+    <ul>
+     {% for error in errors %}
+      <li>{{ error.message }}</li>
+     {% endfor %}
+    </ul>
+   {% endif %}
  <form name="form" method="post">
   <div id="form">
    <div>

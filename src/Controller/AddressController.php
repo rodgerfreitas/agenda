@@ -41,8 +41,9 @@
        */
       public function new(Request $request, ValidatorInterface $validator, $id) {
 
+          $address = new Address;
           if($request->isMethod('post')) {
-              $address = new Address;
+
               $arrPost = $request->get('form');
 
               $address->setContact($this->getDoctrine()->getRepository(Contact::class)->find($id));
@@ -53,15 +54,7 @@
               $errors = $validator->validate($address);
 
               if (count($errors) > 0){
-
-                  echo <pre>var_dump($errors);
-
-                  $this->addFlash(
-                      'error',
-                      'Your changes were saved!'
-                  );
-
-                  return $this->render('addresses/new.html.twig',['address'=> $address]);
+                  return $this->render('addresses/new.html.twig',['address'=> $address,'errors'=>$errors]);
               }
 
               $entityManager = $this->getDoctrine()->getManager();
@@ -71,7 +64,7 @@
               return $this->redirectToRoute('contact_show',['id'=>$id]);
           }
 
-          return $this->render('addresses/new.html.twig');
+          return $this->render('addresses/new.html.twig',['address'=> $address,'errors' => '']);
       }
 
       /**

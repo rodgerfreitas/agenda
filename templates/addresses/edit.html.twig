@@ -3,6 +3,11 @@
 {% block title %}Editar Endereço{% endblock %}
 
 {% block body %}
+ <ul>
+  {% for error in errors %}
+   <li>{{ error.message }}</li>
+  {% endfor %}
+ </ul>
  <form name="form" method="post">
    <div id="form">
     <div>
