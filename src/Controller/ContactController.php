@@ -5,6 +5,7 @@
   use App\Entity\Address;
 
   use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+  use Symfony\Component\Form\Extension\Core\Type\EmailType;
   use Symfony\Component\HttpFoundation\Response;
   use Symfony\Component\HttpFoundation\Request;
   use Symfony\Component\Routing\Annotation\Route;
@@ -21,7 +22,7 @@
        */
        public function index() {
           $contacts= $this->getDoctrine()->getRepository(Contact::class)->findAll();
-          return $this->render('contacts/index.html.twig', array('contacts' => $contacts));
+          return $this->render('contacts/index.html.twig', ['contacts' => $contacts]);
        }
 
       /**
@@ -42,13 +43,13 @@
           $contact = new Contact();
 
           $form = $this->createFormBuilder($contact)
-              ->add('nome', TextType::class, array('attr' => array('class' => 'form-control')))
-              ->add('email', TextType::class, array('attr' => array('class' => 'form-control')))
-              ->add('telefone', TextType::class, array('attr' => array('class' => 'form-control')))
-              ->add('save', SubmitType::class, array(
+              ->add('nome', TextType::class, ['attr' => ['class' => 'form-control']])
+              ->add('email', TextType::class, ['attr' => ['class' => 'form-control email' ]])
+              ->add('telefone', TextType::class, ['attr' => ['class' => 'form-control']])
+              ->add('save', SubmitType::class, [
                   'label' => 'salvar',
-                  'attr' => array('class' => 'btn btn-primary mt-3')
-              ))
+                  'attr' => ['class' => 'btn btn-primary mt-3']
+              ])
               ->getForm();
 
           $form->handleRequest($request);
@@ -76,13 +77,13 @@
 
           $contact = $this->getDoctrine()->getRepository(Contact::class)->find($id) ;
           $form = $this->createFormBuilder($contact)
-              ->add('nome', TextType::class, array('attr' => array('class' => 'form-control')))
-              ->add('email', TextType::class, array('attr' => array('class' => 'form-control')))
-              ->add('telefone', TextType::class, array('attr' => array('class' => 'form-control')))
-              ->add('save', SubmitType::class, array(
+              ->add('nome', TextType::class, ['attr' => ['class' => 'form-control']])
+              ->add('email', EmailType::class, ['attr' => ['class' => 'form-control email']])
+              ->add('telefone', TextType::class, ['attr' => ['class' => 'form-control']])
+              ->add('save', SubmitType::class, [
                   'label' => 'salvar',
-                  'attr' => array('class' => 'btn btn-primary mt-3')
-              ))
+                  'attr' => ['class' => 'btn btn-primary mt-3']
+              ])
               ->getForm();
 
           $form->handleRequest($request);
@@ -119,7 +120,6 @@
           $entityManager->remove($contact);
           $entityManager->flush();
 
-          $response = new Response();
-          $response->send();
+          return $this->redirectToRoute('contact_list');
       }
   }

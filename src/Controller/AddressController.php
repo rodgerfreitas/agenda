@@ -95,7 +95,6 @@
           $entityManager->remove($address);
           $entityManager->flush();
 
-          $response = new Response();
-          $response->send();
+          return $this->redirectToRoute('contact_show',['id'=>$id]);
       }
   }
