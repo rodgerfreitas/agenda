@@ -12,6 +12,7 @@
   use Symfony\Component\Form\Extension\Core\Type\TextType;
   use Symfony\Component\Form\Extension\Core\Type\TextareaType;
   use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+  use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
   class AddressController extends Controller {
@@ -38,7 +39,7 @@
        * @Route("/address/new/{id}", name="address_new")
        * Method({"GET", "POST"})
        */
-      public function new(Request $request, $id) {
+      public function new(Request $request, ValidatorInterface $validator, $id) {
 
           if($request->isMethod('post')) {
               $address = new Address;
@@ -48,6 +49,20 @@
               $address->setQuadra($arrPost['quadra']);
               $address->setNumero($arrPost['numero']);
               $address->setObservacao($arrPost['observacao']);
+
+              $errors = $validator->validate($address);
+
+              if (count($errors) > 0){
+
+                  echo <pre>var_dump($errors);
+
+                  $this->addFlash(
+                      'error',
+                      'Your changes were saved!'
+                  );
+
+                  return $this->render('addresses/new.html.twig',['address'=> $address]);
+              }
 
               $entityManager = $this->getDoctrine()->getManager();
               $entityManager->persist($address);
