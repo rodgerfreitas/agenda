@@ -53,7 +53,7 @@
               ->add('telefone', TextType::class, ['attr' => ['class' => 'form-control']])
               ->add('save', SubmitType::class, [
                   'label' => 'salvar',
-                  'attr' => ['class' => 'btn btn-primary mt-3']
+                  'attr' => ['class' => 'btn btn-primary mt-3 btn-sm']
               ])
               ->getForm();
 
@@ -66,7 +66,7 @@
               $entityManager->persist($contact);
               $entityManager->flush();
 
-              return $this->redirectToRoute('contact_list');
+              return $this->redirectToRoute('contact_show',['id'=>$contact->getId()]);
           }
 
           return $this->render('contacts/new.html.twig', array(
@@ -91,7 +91,7 @@
               ->add('telefone', TextType::class, ['attr' => ['class' => 'form-control']])
               ->add('save', SubmitType::class, [
                   'label' => 'salvar',
-                  'attr' => ['class' => 'btn btn-primary mt-3']
+                  'attr' => ['class' => 'btn btn-primary mt-3 btn-sm']
               ])
               ->getForm();
 
@@ -102,7 +102,7 @@
               $entityManager = $this->getDoctrine()->getManager();
               $entityManager->flush();
 
-              return $this->redirectToRoute('contact_list');
+              return $this->redirectToRoute('contact_show',['id'=>$contact->getId()]);
           }
 
           return $this->render('contacts/edit.html.twig', [
